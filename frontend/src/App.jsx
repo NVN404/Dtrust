@@ -27,6 +27,7 @@ import {
   SEPOLIA_DTRUST_RESOLVER,
   SEPOLIA_SAMPLE_TX
 } from './contracts';
+import { ethers } from 'ethers';
 
 export default function App() {
   // Wallet State
@@ -65,6 +66,27 @@ export default function App() {
       name: 'Deployer & Domain Owner'
     });
   }, []);
+
+  // Connect MetaMask
+  const connectMetaMask = async () => {
+    if (!window.ethereum) {
+      alert("MetaMask not detected! Please install MetaMask to broadcast live Sepolia transactions.");
+      return;
+    }
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const net = await provider.getNetwork();
+      setWallet({
+        address: accounts[0],
+        name: 'MetaMask Account'
+      });
+      setNetwork(net.chainId === 11155111n ? 'Sepolia (11155111)' : `Chain ID: ${net.chainId.toString()}`);
+    } catch (err) {
+      console.error(err);
+      alert("Wallet connection failed: " + err.message);
+    }
+  };
 
   // 1. Generate P-256 Key
   const handleGenerateKey = async () => {
@@ -121,12 +143,73 @@ export default function App() {
     if (!sigR || !sigS) return;
     setIsPublishing(true);
 
-    setTimeout(() => {
-      setIsPublishing(false);
-      const fakeTx = '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join('');
-      setTxHash(fakeTx);
-      
-      const newCert = {
+    try {
+      if (window.ethereum) {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+
+        // Ensure on Sepolia (11155111 / 0xaa36a7)
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0xaa36a7' }],
+          });
+        } catch (switchError) {
+          console.warn("Could not auto-switch chain to Sepolia:", switchError);
+        }
+
+        const resolver = new ethers.Contract(
+          SEPOLIA_DTRUST_RESOLVER,
+          [
+            "function setTLSCert(bytes32 node, bytes32 qx, bytes32 qy, uint64 expiresAt, uint64 nonce, bytes32 r, bytes32 s) external"
+          ],
+          signer
+        );
+
+        const nonce = pinnedCert ? BigInt(pinnedCert.nonce + 1) : 1n;
+        const expiresAt = BigInt(Math.floor(Date.now() / 1000) + 60 * 86400);
+
+        console.log("Broadcasting real transaction to Sepolia via MetaMask...");
+        const tx = await resolver.setTLSCert(
+          selectedDomain.namehash,
+          qx,
+          qy,
+          expiresAt,
+          nonce,
+          sigR,
+          sigS
+        );
+
+        setTxHash(tx.hash);
+        console.log("Transaction submitted to Sepolia:", tx.hash);
+
+        const newCert = {
+          domain: selectedDomain.name,
+          namehash: selectedDomain.namehash,
+          qx,
+          qy,
+          nonce: Number(nonce),
+          issuedAt: Math.floor(Date.now() / 1000),
+          expiresAt: Number(expiresAt),
+          revoked: false
+        };
+        setPinnedCert(newCert);
+
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } else {
+        throw new Error("MetaMask is not detected. To submit real transactions to Sepolia, install MetaMask with Sepolia testnet ETH.");
+      }
+    } catch (err) {
+      console.warn("Sepolia Broadcast Notice:", err);
+      alert(`Sepolia Broadcast Notice:\n\n${err.reason || err.message}\n\nNote: To record an actual transaction on Sepolia Etherscan, your connected MetaMask wallet needs Sepolia ETH for gas.`);
+
+      // Set fallback sample so the demo continues
+      setTxHash(SEPOLIA_SAMPLE_TX);
+      setPinnedCert({
         domain: selectedDomain.name,
         namehash: selectedDomain.namehash,
         qx,
@@ -135,15 +218,10 @@ export default function App() {
         issuedAt: Math.floor(Date.now() / 1000),
         expiresAt: Math.floor(Date.now() / 1000) + 60 * 86400,
         revoked: false
-      };
-      setPinnedCert(newCert);
-
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
       });
-    }, 1200);
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   // 4. Instant Revoke
@@ -189,10 +267,16 @@ export default function App() {
             {network}
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+          <button 
+            onClick={connectMetaMask}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-xs transition cursor-pointer"
+            title="Click to connect real MetaMask wallet"
+          >
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span className="font-mono text-slate-300">{wallet ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}` : 'Disconnected'}</span>
-          </div>
+            <span className="font-mono text-slate-300">
+              {wallet ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}` : 'Connect MetaMask'}
+            </span>
+          </button>
         </div>
       </header>
 
