@@ -10,3 +10,4 @@ interface INameWrapper {
     function isApprovedForAll(address account, address operator) external view returns (bool);
     function canModifyName(bytes32 node, address addr) external view returns (bool);
 }
+

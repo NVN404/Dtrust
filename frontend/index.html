@@ -1,49 +1,160 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light" style="color-scheme: light;">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2310B981'/></svg>" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><defs><linearGradient id='sg' x1='9' y1='5' x2='39' y2='43'><stop offset='0%25' stop-color='%232563EB'/><stop offset='60%25' stop-color='%231D4ED8'/><stop offset='100%25' stop-color='%230F172A'/></linearGradient><linearGradient id='dg' x1='17' y1='14' x2='35' y2='34'><stop offset='0%25' stop-color='%2338BDF8'/><stop offset='100%25' stop-color='%232563EB'/></linearGradient><linearGradient id='eg' x1='24' y1='17.5' x2='24' y2='30.5'><stop offset='0%25' stop-color='%2360A5FA'/><stop offset='100%25' stop-color='%231E40AF'/></linearGradient></defs><rect width='48' height='48' rx='12' fill='%23F0F4F8'/><path d='M24 5L39 10V22C39 31.5 32.5 39.5 24 43C15.5 39.5 9 31.5 9 22V10Z' stroke='url(%23sg)' stroke-width='2.5' fill='none'/><path d='M17 14H25C30.5 14 34.5 18 34.5 24C34.5 30 30.5 34 25 34H17V14Z' stroke='url(%23dg)' stroke-width='2.75' fill='none'/><path d='M24 17.5L18.5 24L24 25.5Z' fill='%2393C5FD'/><path d='M24 17.5L29.5 24L24 25.5Z' fill='%23BFDBFE'/><path d='M18.5 24L24 30.5L24 25.5Z' fill='%232563EB'/><path d='M29.5 24L24 30.5L24 25.5Z' fill='%231D4ED8'/><circle cx='24' cy='24' r='1.5' fill='%23FFFFFF'/></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dtrust | Sovereign TLS & Decentralized PKI for ENS</title>
+    <title>Dtrust | Sovereign dPKI — Light Mode Architecture</title>
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+              sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
               mono: ['JetBrains Mono', 'monospace'],
             },
             colors: {
-              dtrust: {
-                50: '#ecfdf5',
-                100: '#d1fae5',
-                500: '#10b981',
-                600: '#059669',
-                700: '#047857',
-                900: '#064e3b',
+              neu: {
+                bg: '#F0F4F8',
+                surface: '#F0F4F8',
+                primary: '#C8E0F4',
+                secondary: '#F5E0E8',
+                tertiary: '#E8E8E8',
+                text: '#1E293B',
+                muted: '#64748B',
+                accent: '#2563EB',
+                darkText: '#0F172A',
+                blue: '#2563EB',
+                green: '#10B981',
+                red: '#EF4444',
               }
+            },
+            borderRadius: {
+              sm: '10px',
+              DEFAULT: '14px',
+              md: '14px',
+              lg: '20px',
+              xl: '28px',
             }
           }
         }
       }
     </script>
     <style>
-      body {
-        font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-        background-color: #090d16;
-        color: #f1f5f9;
+      :root {
+        color-scheme: light;
+        --border-radius: 14px;
+        --color-light: #F8FAFC;
+        --color-primary: #2563EB;
+      }
+      html, body {
+        color-scheme: light;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: #F8FAFC;
+        color: #0F172A;
+        -webkit-font-smoothing: antialiased;
       }
       .font-mono {
         font-family: 'JetBrains Mono', monospace;
       }
+
+      /* PURE CRISP LIGHT MODE (WHITE SURFACES & SLATE-50 BASE) */
+      .neu-convex {
+        background: #FFFFFF;
+        box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.12),
+                     0 2px 6px -1px rgba(148, 163, 184, 0.08);
+        border-radius: 16px;
+        border: 1px solid #E2E8F0;
+      }
+      .neu-convex-sm {
+        background: #FFFFFF;
+        box-shadow: 0 2px 8px rgba(148, 163, 184, 0.1);
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+      }
+      .neu-concave {
+        background: #F8FAFC;
+        box-shadow: inset 0 2px 4px rgba(148, 163, 184, 0.1);
+        border-radius: 14px;
+        border: 1px solid #E2E8F0;
+      }
+      .neu-concave-sm {
+        background: #F1F5F9;
+        border-radius: 10px;
+        border: 1px solid #E2E8F0;
+      }
+
+      /* INTERACTIVE BUTTONS WITH 150MS TACTILE PRESS */
+      .neu-btn {
+        background: #FFFFFF;
+        color: #1E293B;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+        border-radius: 12px;
+        border: 1px solid #CBD5E1;
+        transition: all 0.15s ease-out;
+      }
+      .neu-btn:hover:not(:disabled) {
+        background: #F8FAFC;
+        border-color: #94A3B8;
+        box-shadow: 0 3px 8px rgba(148, 163, 184, 0.2);
+        transform: translateY(-1px);
+      }
+      .neu-btn:active:not(:disabled), .neu-btn.active {
+        background: #F1F5F9;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        transform: translateY(1px);
+      }
+
+      /* PRIMARY ACCENT BUTTON (VIBRANT ROYAL SAPPHIRE) */
+      .neu-btn-primary {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        color: #FFFFFF;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+        border-radius: 12px;
+        border: 1px solid #1D4ED8;
+        transition: all 0.15s ease-out;
+      }
+      .neu-btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+        transform: translateY(-1px);
+      }
+      .neu-btn-primary:active:not(:disabled) {
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        transform: translateY(1px);
+      }
+
+      /* DANGER BUTTON (CRISP ROSE) */
+      .neu-btn-danger {
+        background: #FEF2F2;
+        color: #DC2626;
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(220, 38, 38, 0.1);
+        border-radius: 12px;
+        border: 1px solid #FECACA;
+        transition: all 0.15s ease-out;
+      }
+      .neu-btn-danger:hover:not(:disabled) {
+        background: #FEE2E2;
+        box-shadow: 0 3px 10px rgba(220, 38, 38, 0.2);
+        transform: translateY(-1px);
+      }
+      .neu-btn-danger:active:not(:disabled) {
+        background: #FECDD3;
+        transform: translateY(1px);
+      }
     </style>
   </head>
-  <body class="min-h-screen bg-[#090d16] text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-300">
+  <body class="min-h-[100dvh] bg-[#F8FAFC] text-[#0F172A] selection:bg-[#DBEAFA] selection:text-[#1E3A8A]">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

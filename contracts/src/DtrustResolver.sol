@@ -222,3 +222,4 @@ contract DtrustResolver is ITLSResolver {
         return interfaceID == type(ITLSResolver).interfaceId || interfaceID == 0x01ffc9a7; // ERC165
     }
 }
+

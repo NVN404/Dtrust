@@ -3,4 +3,8 @@ out
 cache
 broadcast
 .env
+.env.local
 .DS_Store
+dist
+frontend/dist
+.vercel

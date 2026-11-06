@@ -175,3 +175,4 @@ contract DtrustResolverTest is Test {
         assertFalse(resolver.supportsInterface(0xffffffff));
     }
 }
+

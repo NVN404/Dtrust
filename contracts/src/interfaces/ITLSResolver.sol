@@ -113,3 +113,4 @@ interface ITLSResolver {
         string calldata reason
     ) external view returns (bytes32);
 }
+

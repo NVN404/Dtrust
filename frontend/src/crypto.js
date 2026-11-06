@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 // secp256r1 curve order n
 export const CURVE_N = BigInt("0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551");
 export const HALF_N = CURVE_N / 2n;
@@ -44,47 +46,39 @@ export async function generateSovereignP256Key() {
 }
 
 /**
- * Computes the canonical anti-replay PoP digest
+ * Computes the canonical anti-replay PoP digest and packed buffer matching Solidity abi.encodePacked
  */
 export function computePoPDigest({ chainId, resolverAddress, node, qx, qy, nonce, expiresAt }) {
-  // Matches Solidity sha256(abi.encodePacked("DTRUST_POP_V1", chainId, resolver, node, qx, qy, nonce, expiresAt))
-  const prefix = new TextEncoder().encode("DTRUST_POP_V1");
-
-  const chainIdBuf = new Uint8Array(32);
-  new DataView(chainIdBuf.buffer).setBigUint64(24, BigInt(chainId));
-
-  const addrBytes = hexToBytes(resolverAddress);
-  const nodeBytes = hexToBytes(node);
-  const qxBytes = hexToBytes(qx);
-  const qyBytes = hexToBytes(qy);
-
-  const nonceBuf = new Uint8Array(8);
-  new DataView(nonceBuf.buffer).setBigUint64(0, BigInt(nonce));
-
-  const expiryBuf = new Uint8Array(8);
-  new DataView(expiryBuf.buffer).setBigUint64(0, BigInt(expiresAt));
-
-  const totalLength = prefix.length + chainIdBuf.length + addrBytes.length + nodeBytes.length + qxBytes.length + qyBytes.length + nonceBuf.length + expiryBuf.length;
-  const merged = new Uint8Array(totalLength);
-
-  let offset = 0;
-  [prefix, chainIdBuf, addrBytes, nodeBytes, qxBytes, qyBytes, nonceBuf, expiryBuf].forEach(part => {
-    merged.set(part, offset);
-    offset += part.length;
-  });
-
-  return window.crypto.subtle.digest("SHA-256", merged);
+  const cleanAddress = ethers.getAddress(resolverAddress.toLowerCase());
+  const packed = ethers.solidityPacked(
+    ["string", "uint256", "address", "bytes32", "bytes32", "bytes32", "uint64", "uint64"],
+    [
+      "DTRUST_POP_V1",
+      BigInt(chainId),
+      cleanAddress,
+      node,
+      qx,
+      qy,
+      BigInt(nonce),
+      BigInt(expiresAt)
+    ]
+  );
+  return {
+    packedBytes: hexToBytes(packed),
+    digestHex: ethers.sha256(packed)
+  };
 }
 
 /**
- * Signs the PoP digest and guarantees strict low-s malleability compliance
+ * Signs the PoP packed data with NIST P-256 and guarantees strict low-s malleability compliance.
+ * Note: WebCrypto subtle.sign hashes packedBytes with SHA-256 before curve signing,
+ * exactly matching Solidity: bytes32 digest = sha256(abi.encodePacked(...)).
  */
-export async function signPoPDigest(privateKey, digestBuffer) {
-  // Web Crypto ECDSA with SHA-256 outputs IEEE P1363 (64 bytes: r [32] | s [32])
+export async function signPoPDigest(privateKey, packedBytes) {
   const signatureBuffer = await window.crypto.subtle.sign(
     { name: "ECDSA", hash: { name: "SHA-256" } },
     privateKey,
-    digestBuffer
+    packedBytes
   );
 
   const sigBytes = new Uint8Array(signatureBuffer);
@@ -103,4 +97,3 @@ export async function signPoPDigest(privateKey, digestBuffer) {
     s: bufToHex(sBytes)
   };
 }
-

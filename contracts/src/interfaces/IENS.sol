@@ -26,3 +26,4 @@ interface IENS {
     function recordExists(bytes32 node) external view returns (bool);
     function isApprovedForAll(address owner, address operator) external view returns (bool);
 }
+

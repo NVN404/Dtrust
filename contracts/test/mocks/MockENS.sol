@@ -64,3 +64,4 @@ contract MockENS is IENS {
         return _operators[ownerAddr][operator];
     }
 }
+
