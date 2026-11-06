@@ -1,9 +1,10 @@
+// Ethereum Sepolia Official ENS Addresses
 export const SEPOLIA_ENS_REGISTRY = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
+export const SEPOLIA_NAME_WRAPPER = "0x0635513F179D50A207757E05759CbD106D7dFC78";
 export const SEPOLIA_DTRUST_RESOLVER = "0x51Ea4B49Ac5A3f23C469792Dea9D9542a12B980F";
 
-// Live on-chain deployed & confirmed contracts on Monad Testnet with P-256 (0x0100) precompile:
-export const LIVE_MONAD_CERT_REGISTRY = "0xE4ec4B30F417260cf0C3cdca8fbEAE6d337c080b";
-export const LIVE_MONAD_TX = "0x3a3cc2a10c16ec1cdf9e7cf4b51d22a66b4ea5456cd269cfd6c6c0ad2efa754b";
+// Sample verified issuance tx on Sepolia
+export const SEPOLIA_SAMPLE_TX = "0x7d28c94e5e4fa4891b0129f12ab7183e8fa918b209c13d8e09f582910fa31298";
 
 export const KNOWN_DOMAINS = [
   {
@@ -24,6 +25,5 @@ export const KNOWN_DOMAINS = [
 
 export const EXPLORER_URLS = {
   sepolia: "https://sepolia.etherscan.io",
-  monad: "https://testnet.monadscan.com",
   ens: "https://explorer.ens.domains"
 };

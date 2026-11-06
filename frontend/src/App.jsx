@@ -23,9 +23,9 @@ import {
 } from './crypto';
 import { 
   KNOWN_DOMAINS, 
+  SEPOLIA_ENS_REGISTRY,
   SEPOLIA_DTRUST_RESOLVER,
-  LIVE_MONAD_CERT_REGISTRY,
-  LIVE_MONAD_TX
+  SEPOLIA_SAMPLE_TX
 } from './contracts';
 
 export default function App() {
@@ -175,13 +175,13 @@ export default function App() {
 
         <div className="flex items-center gap-4">
           <a
-            href={`https://testnet.monadscan.com/tx/${LIVE_MONAD_TX}`}
+            href={`https://sepolia.etherscan.io/address/${SEPOLIA_DTRUST_RESOLVER}`}
             target="_blank"
             rel="noreferrer"
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-xs font-semibold text-emerald-300 transition"
           >
             <ExternalLink className="w-3.5 h-3.5" />
-            MonadScan Live Tx ↗
+            Sepolia Etherscan ↗
           </a>
 
           <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300">
@@ -238,45 +238,45 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            {/* 1. Live Tx Hash */}
+            {/* 1. Official Sepolia ENS Registry */}
             <a 
-              href={`https://testnet.monadscan.com/tx/${LIVE_MONAD_TX}`}
+              href={`https://sepolia.etherscan.io/address/${SEPOLIA_ENS_REGISTRY}`}
               target="_blank" 
               rel="noreferrer"
               className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
-                  Issuance Tx Hash ↗
+                  ENS Registry (Sepolia) ↗
                 </span>
-                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">Confirmed</span>
+                <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-mono">EIP-137</span>
               </div>
               <p className="font-mono text-xs text-emerald-300 truncate">
-                {LIVE_MONAD_TX}
+                {SEPOLIA_ENS_REGISTRY}
               </p>
               <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
-                View on MonadScan (0x0100 Precompile verified) →
+                View official ENS Registry on Sepolia Etherscan →
               </span>
             </a>
 
-            {/* 2. Contract Address */}
+            {/* 2. DtrustResolver Contract */}
             <a 
-              href={`https://testnet.monadscan.com/address/${LIVE_MONAD_CERT_REGISTRY}`}
+              href={`https://sepolia.etherscan.io/address/${SEPOLIA_DTRUST_RESOLVER}`}
               target="_blank" 
               rel="noreferrer"
               className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
-                  CertRegistry Contract ↗
+                  DtrustResolver Contract ↗
                 </span>
                 <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">Verified</span>
               </div>
               <p className="font-mono text-xs text-emerald-300 truncate">
-                {LIVE_MONAD_CERT_REGISTRY}
+                {SEPOLIA_DTRUST_RESOLVER}
               </p>
               <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
-                View deployed bytecode & events on MonadScan →
+                View verified TLS Resolver on Sepolia Etherscan →
               </span>
             </a>
 
@@ -291,7 +291,7 @@ export default function App() {
                 <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
                   ENS Domain Record ↗
                 </span>
-                <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-mono">ENS App</span>
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">ENS App</span>
               </div>
               <p className="font-mono text-xs text-emerald-300 truncate">
                 {selectedDomain.name}
@@ -303,14 +303,14 @@ export default function App() {
 
             {/* 4. Deployer Wallet Explorer */}
             <a 
-              href={`https://testnet.monadscan.com/address/${wallet ? wallet.address : '0xd886168001663855a8f1ea7DdEa1393A074Ee354'}`}
+              href={`https://sepolia.etherscan.io/address/${wallet ? wallet.address : '0xd886168001663855a8f1ea7DdEa1393A074Ee354'}`}
               target="_blank" 
               rel="noreferrer"
               className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
-                  Owner Wallet ↗
+                  Owner Wallet (Sepolia) ↗
                 </span>
                 <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded font-mono">Deployer</span>
               </div>
@@ -318,7 +318,7 @@ export default function App() {
                 {wallet ? wallet.address : '0xd886168001663855a8f1ea7DdEa1393A074Ee354'}
               </p>
               <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
-                View owner account on MonadScan →
+                View owner account on Sepolia Etherscan →
               </span>
             </a>
           </div>
@@ -582,7 +582,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {/* Link 1: Transaction Hash */}
                 <a 
-                  href={`https://testnet.monadscan.com/tx/${LIVE_MONAD_TX}`}
+                  href={`https://sepolia.etherscan.io/tx/${txHash || SEPOLIA_SAMPLE_TX}`}
                   target="_blank" 
                   rel="noreferrer"
                   className="p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition group flex flex-col justify-between space-y-2"
@@ -592,26 +592,26 @@ export default function App() {
                     <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400" />
                   </div>
                   <p className="font-mono text-xs text-emerald-300 truncate">
-                    {LIVE_MONAD_TX}
+                    {txHash || SEPOLIA_SAMPLE_TX}
                   </p>
-                  <span className="text-[10px] text-slate-500">View live transaction on MonadScan ↗</span>
+                  <span className="text-[10px] text-slate-500">View live transaction on Sepolia Etherscan ↗</span>
                 </a>
 
                 {/* Link 2: Contract Address */}
                 <a 
-                  href={`https://testnet.monadscan.com/address/${LIVE_MONAD_CERT_REGISTRY}`}
+                  href={`https://sepolia.etherscan.io/address/${SEPOLIA_DTRUST_RESOLVER}`}
                   target="_blank" 
                   rel="noreferrer"
                   className="p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition group flex flex-col justify-between space-y-2"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-400">Dtrust Contract</span>
+                    <span className="text-[11px] font-semibold text-slate-400">DtrustResolver Contract</span>
                     <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400" />
                   </div>
                   <p className="font-mono text-xs text-emerald-300 truncate">
-                    {LIVE_MONAD_CERT_REGISTRY}
+                    {SEPOLIA_DTRUST_RESOLVER}
                   </p>
-                  <span className="text-[10px] text-slate-500">View contract bytecode & events ↗</span>
+                  <span className="text-[10px] text-slate-500">View verified contract on Sepolia Etherscan ↗</span>
                 </a>
 
                 {/* Link 3: ENS Domain Explorer */}
@@ -622,7 +622,7 @@ export default function App() {
                   className="p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition group flex flex-col justify-between space-y-2"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-400">ENS Name Explorer</span>
+                    <span className="text-[11px] font-semibold text-slate-400">ENS Domain Record</span>
                     <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400" />
                   </div>
                   <p className="font-mono text-xs text-emerald-300 truncate">
