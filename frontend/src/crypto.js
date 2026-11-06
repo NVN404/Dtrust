@@ -103,3 +103,4 @@ export async function signPoPDigest(privateKey, digestBuffer) {
     s: bufToHex(sBytes)
   };
 }
+
