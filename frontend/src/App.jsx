@@ -174,6 +174,16 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-4">
+          <a
+            href={`https://testnet.monadscan.com/tx/${LIVE_MONAD_TX}`}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-xs font-semibold text-emerald-300 transition"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            MonadScan Live Tx ↗
+          </a>
+
           <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             {network}
@@ -209,6 +219,109 @@ export default function App() {
             <ShieldAlert className="w-4 h-4 text-emerald-400" />
             Launch Client Verifier Simulator
           </button>
+        </div>
+
+        {/* ALWAYS-VISIBLE LIVE EXPLORER LINKS CARD */}
+        <div className="p-6 rounded-2xl bg-slate-900/90 border border-emerald-500/30 space-y-4 shadow-xl shadow-emerald-950/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <h3 className="font-bold text-white text-base flex items-center gap-2">
+                <ExternalLink className="w-4 h-4 text-emerald-400" />
+                Live On-Chain Explorer Verification Links
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full flex items-center gap-1.5 w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              Live On-Chain Proofs (Click to Open)
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            {/* 1. Live Tx Hash */}
+            <a 
+              href={`https://testnet.monadscan.com/tx/${LIVE_MONAD_TX}`}
+              target="_blank" 
+              rel="noreferrer"
+              className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
+                  Issuance Tx Hash ↗
+                </span>
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">Confirmed</span>
+              </div>
+              <p className="font-mono text-xs text-emerald-300 truncate">
+                {LIVE_MONAD_TX}
+              </p>
+              <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
+                View on MonadScan (0x0100 Precompile verified) →
+              </span>
+            </a>
+
+            {/* 2. Contract Address */}
+            <a 
+              href={`https://testnet.monadscan.com/address/${LIVE_MONAD_CERT_REGISTRY}`}
+              target="_blank" 
+              rel="noreferrer"
+              className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
+                  CertRegistry Contract ↗
+                </span>
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">Verified</span>
+              </div>
+              <p className="font-mono text-xs text-emerald-300 truncate">
+                {LIVE_MONAD_CERT_REGISTRY}
+              </p>
+              <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
+                View deployed bytecode & events on MonadScan →
+              </span>
+            </a>
+
+            {/* 3. ENS Explorer for dotlab.studio */}
+            <a 
+              href={selectedDomain.ensExplorer || `https://explorer.ens.domains/${selectedDomain.name}`}
+              target="_blank" 
+              rel="noreferrer"
+              className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
+                  ENS Domain Record ↗
+                </span>
+                <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-mono">ENS App</span>
+              </div>
+              <p className="font-mono text-xs text-emerald-300 truncate">
+                {selectedDomain.name}
+              </p>
+              <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
+                View dotlab.studio on official ENS Explorer →
+              </span>
+            </a>
+
+            {/* 4. Deployer Wallet Explorer */}
+            <a 
+              href={`https://testnet.monadscan.com/address/${wallet ? wallet.address : '0xd886168001663855a8f1ea7DdEa1393A074Ee354'}`}
+              target="_blank" 
+              rel="noreferrer"
+              className="p-4 rounded-xl bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition group flex flex-col justify-between space-y-2"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400 transition flex items-center gap-1">
+                  Owner Wallet ↗
+                </span>
+                <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded font-mono">Deployer</span>
+              </div>
+              <p className="font-mono text-xs text-emerald-300 truncate">
+                {wallet ? wallet.address : '0xd886168001663855a8f1ea7DdEa1393A074Ee354'}
+              </p>
+              <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition">
+                View owner account on MonadScan →
+              </span>
+            </a>
+          </div>
         </div>
 
         {/* Section 1: Domain & ENS Status */}
